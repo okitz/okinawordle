@@ -1,0 +1,10 @@
+持ちうる状態
+
+tile
+- 文字無し()
+- 入力中(letter)
+- 確定(letter, color)
+
+wordRow
+- 未確定{未入力, 入力中}(wordData)
+- 確定済(wordData)
