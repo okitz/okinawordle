@@ -1,30 +1,47 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch} from 'vue'
 import 'animate.css';
 
 const props = defineProps({
   letter: String,
-  state: Number, // [idle, absent, present, correct]
+  state: Number // [idle, absent, present, correct]
 })
 
-const frontTileClass = computed(() => {
-  if(props.letter.length === 0)return "emptyTile"
-  else return "idleTile"
+const flipped = computed(() => props.state >= 0)
+
+const frontTileStyle = computed(() => {
+  const ret = (props.letter.length === 0) ? {
+    outline: `0.2rem solid grey`,
+    outlineOffset: `-0.2rem`
+   } : {
+    outline: `0.2rem solid black`,
+    outlineOffset: `-0.2rem`,
+    animation: `pulse`,
+    animationDuration: `300ms`
+   }
+   if(!flipped)ret.transform = `rotateX(${0}deg)`
+   else{
+      ret.animation = `animation: flip 0.5s;`
+   }
+  return ret
 })
 
 const backTileClass = computed(() => {
-  return [null, "absentTile", "presentTile", "correctTile"][props.state]
+  const ret = {};
+  ret.backgroundColor = ["white", "black", "yellow", "green"][props.state]
+   if(!flipped)ret.transform = `rotateX(${180}deg)`
+   else{
+      ret.animation = `animation: flip 0.5s;`
+   }
+  return ret;
 })
 
-const unflipped = computed(() => {
-  return  props.state === 0;
-})
 </script>
 
 <template>
 <div class="tileWrapper">
-  <div :style="{transform:`rotateX(${unflipped ? 0 : 180}deg)`}" :class="frontTileClass">{{letter}}</div>
-  <div :style="{transform:`rotateX(${unflipped ? 180 : 0}deg)`}" :class="backTileClass">{{letter}}</div>
+  <div :style="frontTileStyle">{{letter}}</div>
+  <div :style="backTileClass">{{letter}}</div>
 </div>
 </template>
 
@@ -36,8 +53,9 @@ const unflipped = computed(() => {
   font-size: 1rem;
   width:2rem;
   height:2rem;
-
+  line-height:2rem;
 }
+
 .tileWrapper div{
   position: absolute;
   backface-visibility:hidden;
@@ -45,26 +63,11 @@ const unflipped = computed(() => {
   height:100%;
 }
 
+@keyframes flip {
+  0%   { transform: rotateX(180deg); }
+  100% { transform: rotate(0deg); }
+}
 
-.emptyTile{
-  border: 0.2rem solid grey;
-  box-sizing: border-box;
-}
-.idleTile{
-  border: 0.2rem solid black;
-  box-sizing: border-box;
-  animation: pulse; 
-  animation-duration: 200ms;
-}
-.absentTile{
-  background-color: grey;
-}
-.presentTile{
-  background-color: yellow;
-}
-.correctTile{
-  background-color: green;
-}
 
 
 
