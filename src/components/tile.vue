@@ -4,41 +4,68 @@ import 'animate.css';
 
 const props = defineProps({
   letter: String,
-  state: Number // [empty, absent, present, correct]
+  state: Number, // [idle, absent, present, correct]
 })
 
-const tileClass = computed(() => {
-  console.log(props)
-
-  if(props.state > 0)return "letterTile"
-  else return "emptyTile"
+const frontTileClass = computed(() => {
+  if(props.letter.length === 0)return "emptyTile"
+  else return "idleTile"
 })
 
+const backTileClass = computed(() => {
+  return [null, "absentTile", "presentTile", "correctTile"][props.state]
+})
+
+const unflipped = computed(() => {
+  return  props.state === 0;
+})
 </script>
 
 <template>
-<div class="tile animate__animated animate__bounce" :class="tileClass">
-    <transition name="bounce">
-    <p v-if="letter">{{letter}}</p>
-  </transition>
+<div class="tileWrapper">
+  <div :style="{transform:`rotateX(${unflipped ? 0 : 180}deg)`}" :class="frontTileClass">{{letter}}</div>
+  <div :style="{transform:`rotateX(${unflipped ? 180 : 0}deg)`}" :class="backTileClass">{{letter}}</div>
 </div>
 </template>
 
 <style scoped>
-.tile{
-  margin:0.1vw;
+.tileWrapper{
+  position:relative;
+  margin:0.1rem;
   text-align: center;
-  font-size: 0.01vm;
+  font-size: 1rem;
+  width:2rem;
+  height:2rem;
+
 }
-.letterTile{
-  width:3.8vw;
-  height:3.8vw;
+.tileWrapper div{
+  position: absolute;
+  backface-visibility:hidden;
+  width:100%;
+  height:100%;
+}
+
+
+.emptyTile{
+  border: 0.2rem solid grey;
+  box-sizing: border-box;
+}
+.idleTile{
+  border: 0.2rem solid black;
+  box-sizing: border-box;
+  animation: pulse; 
+  animation-duration: 200ms;
+}
+.absentTile{
+  background-color: grey;
+}
+.presentTile{
+  background-color: yellow;
+}
+.correctTile{
   background-color: green;
 }
 
-.emptyTile{
-  width:3vw;
-  height:3vw;
-  border: 0.4vw solid grey;
-}
+
+
 </style>
