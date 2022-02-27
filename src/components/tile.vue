@@ -4,35 +4,40 @@ import 'animate.css';
 
 const props = defineProps({
   letter: String,
-  state: Number // [idle, absent, present, correct]
+  state: Number, // [idle, absent, present, correct]
+  index: Number
 })
 
-const flipped = computed(() => props.state >= 0)
+const flipped = computed(() => props.state > 0)
 
 const frontTileStyle = computed(() => {
-  const ret = (props.letter.length === 0) ? {
-    outline: `0.2rem solid grey`,
-    outlineOffset: `-0.2rem`
+  const ret = (!props.letter || props.letter.length === 0) ? {
+    outline: `0.1rem solid grey`,
+    outlineOffset: `-0.1rem`
    } : {
-    outline: `0.2rem solid black`,
-    outlineOffset: `-0.2rem`,
+    color:`black`,
+    outline: `0.1rem solid black`,
+    outlineOffset: `-0.1rem`,
     animation: `pulse`,
     animationDuration: `300ms`
    }
-   if(!flipped)ret.transform = `rotateX(${0}deg)`
+   if(!flipped.value)ret.transform = `rotateX(${0}deg)`
    else{
-      ret.animation = `animation: flip 0.5s;`
+      ret.transition = `transform 400ms linear ${260*props.index}ms`
+      ret.transform = `rotateX(${180}deg)`
    }
   return ret
 })
 
 const backTileClass = computed(() => {
   const ret = {};
-  ret.backgroundColor = ["white", "black", "yellow", "green"][props.state]
-   if(!flipped)ret.transform = `rotateX(${180}deg)`
-   else{
-      ret.animation = `animation: flip 0.5s;`
-   }
+  ret.backgroundColor = ["white", "grey", "#c9b458", "#6aaa64"][props.state]
+  ret.color = `white`
+  if(!flipped.value)ret.transform = `rotateX(${180}deg)`
+  else{
+    ret.transition = `transform 400ms linear ${260*props.index}ms`
+    ret.transform = `rotateX(${0}deg)`
+  }
   return ret;
 })
 
@@ -62,13 +67,5 @@ const backTileClass = computed(() => {
   width:100%;
   height:100%;
 }
-
-@keyframes flip {
-  0%   { transform: rotateX(180deg); }
-  100% { transform: rotate(0deg); }
-}
-
-
-
 
 </style>
