@@ -7,6 +7,7 @@ const props = defineProps({
   state: Number, // [idle, absent, present, correct]
   index: Number
 })
+const emit = defineEmits(['animation-end'])
 
 const flipped = computed(() => props.state > 0)
 
@@ -31,7 +32,7 @@ const frontTileStyle = computed(() => {
 
 const backTileClass = computed(() => {
   const ret = {};
-  ret.backgroundColor = ["white", "grey", "#c9b458", "#6aaa64"][props.state]
+  ret.backgroundColor = ["#FFFFFF", "#787C7E", "#C9B458", "#6AAA64"][props.state]
   ret.color = `white`
   if(!flipped.value)ret.transform = `rotateX(${180}deg)`
   else{
@@ -46,7 +47,7 @@ const backTileClass = computed(() => {
 <template>
 <div class="tileWrapper">
   <div :style="frontTileStyle">{{letter}}</div>
-  <div :style="backTileClass">{{letter}}</div>
+  <div :style="backTileClass" @transitionend ="emit('animation-end')">{{letter}}</div>
 </div>
 </template>
 
@@ -59,6 +60,8 @@ const backTileClass = computed(() => {
   width:2rem;
   height:2rem;
   line-height:2rem;
+
+  user-select: none;
 }
 
 .tileWrapper div{
