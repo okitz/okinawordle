@@ -8,3 +8,6 @@ tile
 wordRow
 - 未確定{未入力, 入力中}(wordData)
 - 確定済(wordData)
+
+意味を表示して推測させる
+他にもヒントを
