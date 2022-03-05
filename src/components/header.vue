@@ -3,9 +3,14 @@ import { ref, computed, watch } from 'vue'
 import { QuestionFilled,Setting,DataAnalysis } from '@element-plus/icons-vue'
 
 const props = defineProps({
-  cleared:false,
+  answerWord:String,
+  clearState:Number,
   scoreText:String,
-  resultText:String
+  resultText:String,
+  playedCount:Number,
+  winRate:Number,
+  currentStreak:Number,
+  maxStreak:Number
 })
 
 
@@ -14,19 +19,14 @@ const guideDialogVisible = ref(false),
       statsDialogVisible = ref(false)  
 
 watch(
-  () => props.cleared,
+  () => props.clearState,
   () => {
-    statsDialogVisible.value = true
+    if(props.clearState)statsDialogVisible.value = true
   }
 )
 
-const playedCount = computed(() => localStorage.getItem('playedCount') || 0),
-      winCount = computed(() => localStorage.getItem('winCount') || 0),
-      currentStreak = computed(() => localStorage.getItem('currentStreak') || 0),
-      maxStreak = computed(() => localStorage.getItem('maxStreak') || 0)
-
 const shareText = computed(() => {
-  return `OKINAWordle${props.scoreText}\n\n${props.resultText}\n\nhttp://localhost:3000/`
+  return `OKINAWordle${props.scoreText}\n\n${props.resultText}\n${location.href}`
 })
 const shareOnTwitter = () => {
   const url = `https://twitter.com/intent/tweet?text=${shareText.value}&hashtags=OKINAWordle`
@@ -79,7 +79,7 @@ const copyToClipboard = () => {
   <el-dialog v-model="statsDialogVisible" title="STATISTICS"  :width="'min(100%,40rem)'">
   <div class="statsWrapper">
     <div><div class="scores">{{playedCount}}</div>Played</div>
-    <div><div class="scores">{{winCount}}</div>Win %</div>
+    <div><div class="scores">{{winRate}}</div>Win %</div>
     <div><div class="scores">{{currentStreak}}</div>Current<br>Streak</div>
     <div><div class="scores">{{maxStreak}}</div>Max<br>Streak</div>
 
@@ -90,8 +90,11 @@ const copyToClipboard = () => {
     <div class="statsButton copyButton" @click="copyToClipboard">
       COPY
     </div>
-    <div v-if="cleared" class="clearDisplay">
+    <div v-if="clearState === 1" class="clearDisplay">
       CLEAR!
+    </div>
+    <div v-if="clearState === 2" class="clearDisplay">
+      {{answerWord}}
     </div>
   </div>
 
