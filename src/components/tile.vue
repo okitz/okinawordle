@@ -54,11 +54,11 @@ const backTileClass = computed(() => {
 <style scoped>
 .tileWrapper{
   position:relative;
-  margin:0.1rem;
+  margin:0.11rem;
   text-align: center;
-  font-size: 1rem;
-  width:2rem;
-  height:2rem;
+  font-size: 1.5rem;
+  width:2.0rem;
+  height:2.0rem;
   line-height:2rem;
 
   user-select: none;
@@ -69,6 +69,8 @@ const backTileClass = computed(() => {
   backface-visibility:hidden;
   width:100%;
   height:100%;
+  font-family: 'Kiwi Maru';
+
 }
 
 </style>

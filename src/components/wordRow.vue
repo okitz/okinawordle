@@ -15,7 +15,7 @@ const animationCatched = ref(0)
 <template>
 <div class="tilesWrapper">
 <tile v-for="(letterData,index) in wordData" :letter="letterData.letter" :state="letterData.state" :index="index" :key="index" @animation-end="++animationCatched === 5 ? emit('animation-end') : null"></tile>
-<el-popover v-if="meanings" placement="bottom" trigger="click" width="50vw">
+<el-popover v-if="meanings" placement="bottom" trigger="click" width="5rem">
   <template #reference>
     <el-icon color="black">
     <InfoFilled />

@@ -21,13 +21,14 @@ const styleByState = computed(() => {
 
 <style scoped>
 .keyButton{
-  height:2rem;
+  height:2.2rem;
   margin:0.1rem;
   text-align: center;
-  font-size: 1rem;
+  font-size: 1.1rem;
   line-height:2rem;
   border-radius: 0.3rem;
-
+  
+  font-family: 'Fredoka','Kiwi Maru',sans-serif;
   user-select: none;
 
 }

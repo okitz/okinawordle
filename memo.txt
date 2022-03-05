@@ -11,3 +11,9 @@ wordRow
 
 意味を表示して推測させる
 他にもヒントを
+
+todo
+- 同じ意味の単語をまとめる
+- 不適切な単語を排除する
+- Twitterシェア
+- stats webstrage
