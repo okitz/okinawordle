@@ -13,18 +13,21 @@ const props = defineProps({
 })
 const emit = defineEmits(['updateClearState'])
 
-const ROW = 16, LENGTH = 5,
-      letters = ref( ['ア', 'イ', 'ウ', 'エ', 'オ', 'カ', 'キ', 'ク', 'ケ', 'コ', 'サ', 'シ', 'ス', 'セ', 'ソ', 'タ', 'チ', 'ツ', 'テ', 'ト', 'ナ', 'ニ', 'ヌ', 'ネ', 'ノ', 'ハ', 'ヒ', 'フ', 'ヘ', 'ホ', 'マ', 'ミ', 'ム', 'メ', 'モ', 'ヤ', '','ユ','', 'ヨ', 'ラ', 'リ', 'ル', 'レ', 'ロ', 'ワ','ヲ', 'ン', '','ー','ガ', 'ギ', 'グ', 'ゲ', 'ゴ', 'ザ', 'ジ', 'ズ', 'ゼ', 'ゾ', 'ダ', 'ヂ', 'ヅ', 'デ', 'ド', 'バ', 'ビ', 'ブ', 'ベ', 'ボ', 'パ', 'ピ', 'プ', 'ペ', 'ポ', 'ァ', 'ィ', 'ゥ', 'ェ', 'ォ',  'ャ', 'ュ', 'ョ','ッ','ヮ','','','','','','','','','','','','','','',''])
+const ROW = 10, LENGTH = 4,
+      letters = ref( ['ア', 'イ', 'ウ', 'エ', 'オ', 'カ', 'キ', 'ク', 'ケ', 'コ', 'サ', 'シ', 'ス', 'セ', 'ソ', 'タ', 'チ', 'ツ', 'テ', 'ト', 'ナ', 'ニ', 'ヌ', 'ネ', 'ノ', 'ハ', 'ヒ', 'フ', 'ヘ', 'ホ', 'マ', 'ミ', 'ム', 'メ', 'モ', 'ヤ', '','ユ','', 'ヨ', 'ラ', 'リ', 'ル', 'レ', 'ロ', 'ワ','', 'ン', '','ー','ガ', 'ギ', 'グ', 'ゲ', 'ゴ', 'ザ', 'ジ', 'ズ', 'ゼ', 'ゾ', 'ダ', '', 'ヅ', 'デ', 'ド', 'バ', 'ビ', 'ブ', 'ベ', 'ボ', 'パ', 'ピ', 'プ', 'ペ', 'ポ', 'ァ', 'ィ', 'ゥ', 'ェ', 'ォ',  'ャ', 'ュ', 'ョ','ッ','ヮ','','','','','','','','','','','','','','',''])
       
 const letterState = ref([])
 for(let i=0;i<letters.value.length;i++)letterState.value.push(0);
 
-const answerList = listJSON.map((word, ID) => {return {'word':word, 'ID':ID}}).filter((wordObj) => wordObj.word.length === LENGTH)
+const answerList = dictJSON.map((word, indexInWhole) => {return {'word':word.title, 'indexInWhole':indexInWhole, 'part':word.part}}).filter((wordObj) => wordObj.word.length === LENGTH && wordObj.part && wordObj.part.includes('名'))
+console.log(answerList)
 const today = Math.floor((Date.now()-(new Date()).getTimezoneOffset()*60000)/86400000)
-const answerNumber = Math.floor(seedrandom(today)()*answerList.length)
+const answerNumber = Math.floor((props.isMain ? seedrandom(today+100)() : Math.random())*answerList.length)
 const answerWord = answerList[answerNumber].word
-const answerID = ref(answerList[answerNumber].ID)
+const answerID = ref(answerList[answerNumber].indexInWhole)// 全体で前から何番目か
 const wordsArray = reactive(props.pWordsArray)
+let givenUp = reactive(props.clearState)
+
 
 console.log(answerWord)
 
@@ -85,7 +88,7 @@ const updateClearState = () => {
     const lastWordData = wordsData.value[wordsArray.length-2]
     if(lastWordData && lastWordData.length === LENGTH && lastWordData.every((letter) => letter.state === 3)){
         emit('updateClearState', 1, `${wordsArray.length-1}/${ROW}`,ret, answerWord)
-    }else if(wordsArray.length-1 === ROW){
+    }else if(wordsArray.length-1 === ROW || givenUp){
         emit('updateClearState', 2,`X/${ROW}`, ret, answerWord)
     }
 }
@@ -111,7 +114,12 @@ const deleteButton = () => {
     if(len > 0)wordsArray[lastInd] = wordsArray[lastInd].slice(0,len-1)
 
 }
-
+const giveupButton = () => {
+    if(!props.clearState && confirm("あきらめて答えを表示しますか？")){
+        givenUp = true
+        updateClearState()
+    }
+}
 const getMeanings = (wordData) => {
     let word = dictJSON.find((x) => x.title === wordData.map(x => x.letter).join(''),)
     if(word && dictJSON[answerID.value].title === word.title)word = dictJSON[answerID.value]
@@ -131,46 +139,54 @@ const hintTexts = computed(() => {
 <div class="tableWrapper">
 <div id="tableLeftColumn">
     <template v-for="(wordData,index) in wordsData" :key="index">
-    <word-row  v-if="index < ROW/2" :wordData="wordData" :meanings="getMeanings(wordData)" v-on:animation-end="usedLetters = updateUsedLetters();updateClearState()"></word-row>
+    <word-row  v-if="index < ROW/2" :LENGTH="LENGTH" :wordData="wordData" :meanings="getMeanings(wordData)" v-on:animation-end="usedLetters = updateUsedLetters();updateClearState()"></word-row>
     </template>
 </div>
 <div id="tableRightColumn">
     <template v-for="(wordData,index) in wordsData" :key="index">
-    <word-row  v-if="index >= ROW/2" :wordData="wordData" :meanings="getMeanings(wordData)" v-on:animation-end="usedLetters = updateUsedLetters();updateClearState()"></word-row>
+    <word-row  v-if="index >= ROW/2" :LENGTH="LENGTH" :wordData="wordData" :meanings="getMeanings(wordData)" v-on:animation-end="usedLetters = updateUsedLetters();updateClearState()"></word-row>
     </template>
 </div>
 </div>
 
 <div class="keyBoardWrapper">
 <div class="keyButtonsWrapper">
-<keyButton :letter="'ENTER'" :state="4" @click="confirmButton">confirm</keyButton>
-<keyButton :letter="'DELETE'" :state="4" @click="deleteButton">delete</keyButton>
+<keyButton :letter="'ENTER'" :color="0" :isLong="true" @click="confirmButton">confirm</keyButton>
+<keyButton :letter="'DELETE'" :color="0" :isLong="true" @click="deleteButton">delete</keyButton>
     <el-popover placement="bottom" trigger="click" width="min(85%,50rem)">
       <template #reference>
-        <keyButton :letter="'HINT'" :state="4"></keyButton>
+        <keyButton :letter="'HINT'" :color="0" :isLong="true"></keyButton>
       </template>
-      <div>
-          お題の意味
-          <div style="margin: 0.4rem;" v-for="meaning in dictJSON[answerID].meanings">{{meaning}}</div>
-      </div>
+    <el-collapse>
+        <el-collapse-item title="一つ前の単語の意味（五十音順）" name="1">
+            <div style="margin: 0.4rem;" v-for="meaning in dictJSON[answerID-1].meanings">{{meaning}}</div>
+        </el-collapse-item>
+        <el-collapse-item title="お題の単語の意味" name="2">
+            <div style="margin: 0.4rem;" v-for="meaning in dictJSON[answerID].meanings">{{meaning}}</div>
+        </el-collapse-item>
+        <el-collapse-item title="一つ後ろの単語の意味（五十音順）" name="3">
+            <div style="margin: 0.4rem;" v-for="meaning in dictJSON[answerID+1].meanings">{{meaning}}</div>
+        </el-collapse-item>
+        </el-collapse> 
       <div v-for="(hintText,index) in hintTexts" :key="index">
       ・{{hintText}}
       </div>
     </el-popover>
+<keyButton :letter="clearState ? 'OVER!' : 'GIVE UP'" :color="[0,3,2][clearState||0]" :isLong="true" @click="giveupButton">delete</keyButton>
 </div>
 
 
 <template v-for="i in 5">
 <div class="keyButtonsWrapper">
 <template  v-for="(letter,index) in letters.slice(0,50)" :key="index">
-<keyButton v-if="index%5 === i-1" :letter="letter" :state="letter === '' ? -1 : usedLetters[index]"  @click="addLetterToRow(letter)"></keyButton>
+<keyButton v-if="index%5 === i-1" :letter="letter" :color="letter === '' ? -1 : usedLetters[index]"  @click="addLetterToRow(letter)"></keyButton>
 </template>
 </div>
 </template>
 <template v-for="i in 5">
 <div class="keyButtonsWrapper">
 <template  v-for="(letter,index) in letters.slice(50)" :key="index">
-<keyButton v-if="index%5 === i-1" :letter="letter" :state="letter === '' ? -1 : usedLetters[50+index]"  @click="addLetterToRow(letter)"></keyButton>
+<keyButton v-if="index%5 === i-1" :letter="letter" :color="letter === '' ? -1 : usedLetters[50+index]"  @click="addLetterToRow(letter)"></keyButton>
 </template>
 </div>
 </template>

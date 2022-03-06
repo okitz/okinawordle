@@ -3,14 +3,15 @@ import { ref, computed } from 'vue'
 
 const props = defineProps({
   letter: String,
-  state: Number
+  color: Number,
+  isLong: Boolean
 })
 
 const styleByState = computed(() => {
   return {
-    width: props.state <= 3 ? '1.6rem': '5rem',
-    backgroundColor: ["#D3D6DA", "#787C7E", "#C9B458", "#6AAA64","#D3D6DA"][props.state],
-    color: props.state === 0 || props.state === 4 ? "black" : "white"
+    width: props.isLong ? '5rem': '1.6rem',
+    backgroundColor: ["#D3D6DA", "#787C7E", "#C9B458", "#6AAA64"][props.color],
+    color: props.color === 0 || props.color === 3 ? "black" : "white"
   }
 })
 </script>

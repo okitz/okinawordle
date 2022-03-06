@@ -17,3 +17,7 @@ todo
 - 不適切な単語を排除する
 - Twitterシェア
 - stats webstrage
+
+- タブで無限のやつ
+
+partList = ['他=taN,=Qci、自', '感', '名、感', '他=raN,=Qci', '=kaN,=ci', '自=baN,=di', '自＝raN,=ti', '名、接頭', '他=riraN,=Qti', '名*', '自=iaN,=ti', '自 =raN,=ti', '自 =kaN,=ci', '接尾=raN,=ti,一部不規則', '自･不規則,活用は?icuNと同じ', '連体、感', '接尾=raN,=Qti', '自=daN,=ti', '接続', '他=aN,=ci', '他=daN,=ti、接尾', '自=aN,=ti', '自=raN,=ti', '名、接頭、接尾', '自=N,=raN,=Qti', '自=gaN,=zi', '他=raN,=aN,=ti', '他=gaN,=zi', '助詞的に用いられる', '名=raN,=ti', '接尾', '名', '他=raN,=ti', '自=maN,=ji', '接尾･不規則', '自=raN,=aN,=ti', '接尾=maN,=di', '自･他=saN,=ci', '自=raN,=ci', '各', '自、否定形のみがある', '自･不規則', '自', '他 =saN,=ci', '名･感', '名、副', '名･副･連体', '感、名', '自=saN,=ci', '文', '動', '他=kaN,=ci', '他=taN,=ti', '他=raN=ti', '他･不規則', '副、名', '他=saN,=ci、接尾', '接尾=saN,=ci', '感、接頭', '接尾=kaN,=ci', '副･名', '名･接尾', '名･連体', '副', '連詞', '接続、副', '名･接尾･感･助', '自=aN,raN,=ti', '形', '他=raN,＝ti', '他=raN,=ti、接尾', '副･接続', '自=taN,=Qci', '他=aN,=ti', '感･助', '自=riraN,=Qti', '自=taN,=ci', '他 =raN,=ti', '自=aN,=raN,=ti', '副、接続', '名、接尾', '名･副', '形、接尾', '自=kaN,=ci', '他=taN,=Qci', '他=saN,=ci', '自=maN,=di', '自･他=raN,=ti', '感、副', '連詞･不規則', '名、按尾', '助詞', None, '他=raN,?umaaNともいう,=ti', '他=kaN,=ci.', '自･他=aN,=raN,=ti', '他=aN,=raN,=ti', '他=baN,=di', '接頭', '他=maN,=di', '他=saN,=ti', '自=raN,=Qci', '他=daN,=ti', '自=raN,=ti、接尾', '=maN,=di、他、自', '=maN,=di', '=raN,=ti、他、自', '自=raN=ti', '他、他=raN,=ti', '他', '接尾=riraN,=Qti', '自=ti', '連体･名', '接頭･接尾', '他=raN,=ci', '他=daN,=ci', '感･副', '助', '連体', '自=waN,=ti', '=saN,=ci、他、自', '接尾=raN,=ti', '=riraN,=Qti', '副、接頭', '句', '他=gan,=zi', '=aN,=raN,=ti、他、自', '感･名']
