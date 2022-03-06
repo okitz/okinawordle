@@ -156,7 +156,7 @@ onMounted(updateClearState)
 <div class="keyButtonsWrapper">
 <keyButton :letter="'ENTER'" :color="0" :isLong="true" @click="confirmButton">confirm</keyButton>
 <keyButton :letter="'DELETE'" :color="0" :isLong="true" @click="deleteButton">delete</keyButton>
-    <el-popover placement="bottom" trigger="click" width="min(85%,50rem)">
+    <el-popover placement="bottom" trigger="click" width="min(85%,40rem)">
       <template #reference>
         <keyButton :letter="'HINT'" :color="0" :isLong="true"></keyButton>
       </template>

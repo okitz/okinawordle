@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, reactive } from 'vue'
+import { ref, onMounted, reactive, computed } from 'vue'
 import headerComponent from'./header.vue'
 import gameTable from'./gameTable.vue'
 
@@ -53,6 +53,8 @@ const clearAction = (st, scTxt, rsTxt, ansW) => {
     }
 }
 
+const savedToday = computed(() => lastSavedDate.value === today)
+
 onMounted(() => {
     if(lastClearedDate.value < today-1)currentStreak.value = 0;
     if(lastSavedDate.value !== today){
@@ -74,7 +76,7 @@ const switchMode = () =>{
 <template>
 <headerComponent
 @switchMode="switchMode"
-:isMain="isMain" :answerWord="answerWord" :clearState="clearState" :scoreText="scoreText" :resultText="resultText" :playedCount="playedCount" :winRate="winRate" :currentStreak="currentStreak" :maxStreak="maxStreak"
+:isMain="isMain" :answerWord="answerWord" :clearState="clearState" :scoreText="scoreText" :resultText="resultText" :playedCount="playedCount" :winRate="winRate" :currentStreak="currentStreak" :maxStreak="maxStreak" :savedToday="savedToday"
 ></headerComponent>
 <gameTable :isMain="isMain" :pWordsArray="wordsArray" :clearState="clearState" @updateClearState="clearAction"></gameTable>
 </template>

@@ -11,12 +11,13 @@ const props = defineProps({
   playedCount:Number,
   winRate:Number,
   currentStreak:Number,
-  maxStreak:Number
+  maxStreak:Number,
+  savedToday:Boolean
 })
 
 const emit = defineEmits(['switchMode'])
 
-const guideDialogVisible = ref(false),
+const guideDialogVisible = ref(!props.savedToday),
       settingDialogVisible = ref(false),
       statsDialogVisible = ref(false)  
 
@@ -64,9 +65,9 @@ const switchMode = () => {
     <div style="color:#5F995A;font-weight: bold;font-size: 1.5rem;">ルール</div>
     <ul>
     <li>お題は日替わりでカナ4文字の名詞です</li>
-    <li>単語として登録されていない4文字も入力できます</li>
+    <li><span  style="color:#cf252d;">単語として登録されていない4文字も入力できます</span></li>
     <li>辞書に登録されている単語が入力されている場合、ⓘアイコンから情報を見ることができます</li>
-    <li>ランダムモードのお題・入力履歴はモードを切り替えるたびにリセットされます</li>
+    <li>ランダムモードのお題・入力履歴はモードを<span  style="color:#cf252d;">切り替えるたびにリセットされます</span></li>
     </ul>
     </div>
 
@@ -104,9 +105,18 @@ const switchMode = () => {
       <!-- <img src="../assets/Logo blue.svg" width="50" height="50"> -->
       TWEET
     </div>
+    <el-tooltip
+        class="box-item"
+        effect="dark"
+        content="Copied!"
+        placement="bottom"
+        trigger="click"
+    >
     <div class="statsButton copyButton" @click="copyToClipboard">
       COPY
     </div>
+    </el-tooltip>
+
     <div v-if="clearState === 1" class="clearDisplay">
       CLEAR!
     </div>
