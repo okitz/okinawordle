@@ -19,7 +19,7 @@ const playedCount = ref(parseInt(localStorage.getItem('playedCount') || "0")),
       lastPlayedDate = ref(parseInt(localStorage.getItem('lastPlayedDate') || 0)),
       lastSavedDate = ref(parseInt(localStorage.getItem('lastSavedDate') || 0)),
       clearState = ref(props.isMain ? parseInt(localStorage.getItem('clearState')) : 0),
-      wordsArray = reactive(localStorage.getItem('wordsArray') && props.isMain && lastSavedDate === today? localStorage.getItem('wordsArray').split(',') : [""]),
+      wordsArray = ref(localStorage.getItem('wordsArray') && props.isMain && lastSavedDate.value === today ? localStorage.getItem('wordsArray').split(',') : [""]),
       scoreText = ref(""),
       resultText = ref(""),
       answerWord = ref("")

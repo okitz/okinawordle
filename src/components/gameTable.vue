@@ -1,9 +1,9 @@
 <script setup>
-import { ref, computed, reactive } from 'vue'
+import { ref, computed, reactive, onMounted } from 'vue'
 import wordRow from './wordRow.vue'
 import keyButton from './keyButton.vue'
 import dictJSON from '../assets/wordDict.json'
-import listJSON from '../assets/wordList.json'
+import answerListJSON from '../assets/answerList.json'
 import seedrandom from 'seedrandom'
 
 const props = defineProps({
@@ -11,6 +11,8 @@ const props = defineProps({
     pWordsArray:Array,
     clearState:Number
 })
+
+
 const emit = defineEmits(['updateClearState'])
 
 const ROW = 10, LENGTH = 4,
@@ -19,12 +21,10 @@ const ROW = 10, LENGTH = 4,
 const letterState = ref([])
 for(let i=0;i<letters.value.length;i++)letterState.value.push(0);
 
-const answerList = dictJSON.map((word, indexInWhole) => {return {'word':word.title, 'indexInWhole':indexInWhole, 'part':word.part}}).filter((wordObj) => wordObj.word.length === LENGTH && wordObj.part && wordObj.part.includes('名'))
-console.log(answerList)
 const today = Math.floor((Date.now()-(new Date()).getTimezoneOffset()*60000)/86400000)
-const answerNumber = Math.floor((props.isMain ? seedrandom(today+100)() : Math.random())*answerList.length)
-const answerWord = answerList[answerNumber].word
-const answerID = ref(answerList[answerNumber].indexInWhole)// 全体で前から何番目か
+const answerNumber = Math.floor((props.isMain ? seedrandom(today+100)() : Math.random())*answerListJSON.length)
+const answerWord = answerListJSON[answerNumber].word
+const answerID = ref(answerListJSON[answerNumber].indexInWhole)// 全体で前から何番目か
 const wordsArray = reactive(props.pWordsArray)
 let givenUp = reactive(props.clearState)
 
@@ -129,6 +129,9 @@ const getMeanings = (wordData) => {
 const hintTexts = computed(() => {
     return []
 })
+
+
+onMounted(updateClearState)
 
 </script>
 
