@@ -1,4 +1,4 @@
 # okinawordle
 
 - Wordle variant featuring Okinawan dialect vocabulary.
-= Developed in Vue.js
+- Developed in Vue.js
